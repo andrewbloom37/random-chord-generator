@@ -1,4 +1,3 @@
-
 const percentToDecimal = (input: number) => input / 100;
 
 const generateRandomNumber = (n: number) => Math.floor(Math.random() * n);
@@ -82,6 +81,7 @@ const completelyRandom: ChanceOfPlaying  = {
   thirteenth: generateRandomNumber(100),
 };
 
+export const generateRoot = generateRandomNumber(12);
 export const chordCalculator = (chance = completelyRandom): Chord =>
   calculateNotesToPlay(generateRandomChord(), chance);
 
