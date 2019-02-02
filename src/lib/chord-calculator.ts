@@ -45,7 +45,7 @@ const generateRandomChord = () => {
   if (chord.fifth === 8) chord.thirteenth = null;
   if (chord.seventh === 9) chord.thirteenth = null;
   return chord;
-}
+};
 
 interface ChanceOfPlaying {
   third: number,
@@ -81,8 +81,85 @@ const completelyRandom: ChanceOfPlaying  = {
   thirteenth: generateRandomNumber(100),
 };
 
-export const generateRoot = generateRandomNumber(12);
+export const generateRoot = () => generateRandomNumber(12);
 export const chordCalculator = (chance = completelyRandom): Chord =>
   calculateNotesToPlay(generateRandomChord(), chance);
 
+interface JustRoot {
+  root: number,
+};
 
+export type FullChord = JustRoot & Chord;
+
+export const calculateChordRelativeToRoot = (root: number, chord: Chord): FullChord => ({
+  root,
+  third: chord.third ? chord.third + root : null,
+  fifth: chord.fifth ? chord.fifth + root : null,
+  seventh: chord.seventh ? chord.seventh + root : null,
+  ninth: chord.ninth ? chord.ninth.map(v => v + root) : null,
+  eleventh: chord.eleventh ? chord.eleventh + root : null,
+  thirteenth: chord.thirteenth ? chord.thirteenth + root : null,
+});
+
+const note = ['A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab'];
+export const getNote = (root: number) => note[root]; 
+
+const translateThird = (note: number | null) => {
+  if (!note) return null;
+  if (note === 3) return '-';
+  if (note === 4) return 'M';
+  return '4';
+};
+
+const translateFifth = (note: number | null) => {
+  if (!note) return null;
+  if (note === 6) return 'b5';
+  if (note === 7) return '5';
+  return '+5';
+};
+
+const translateSeventh = (note: number | null) => {
+  if (!note) return null;
+  if (note === 9) return '6';
+  if (note === 10) return 'Dom7';
+  return 'M7';
+};
+
+const translateNinth = (note: Array<number> | null) => {
+  if (!note) return null;
+  if (note.length === 2) return 'b9 & #9';
+  const ninth = note[0];
+  if (ninth === 13) return 'b9';
+  if (ninth === 14) return '9';
+  return '#9'
+};
+
+const translateEleventh = (note: number | null) => {
+  if (!note) return null;
+  if (note === 17) return '11';
+  return '#11';
+};
+
+const translateThirteenth = (note: number | null) => {
+  if (!note) return null;
+  if (note === 20) return 'b13';
+  return '13';
+};
+
+export interface ReadableChord {
+  third: string | null,
+  fifth: string | null,
+  seventh: string | null,
+  ninth: string | null,
+  eleventh: string | null,
+  thirteenth: string | null,
+};
+
+export const getReadableChord = (chord: Chord): ReadableChord => ({
+  third: translateThird(chord.third),
+  fifth: translateFifth(chord.fifth),
+  seventh: translateSeventh(chord.seventh),
+  ninth: translateNinth(chord.ninth),
+  eleventh: translateEleventh(chord.eleventh),
+  thirteenth: translateThirteenth(chord.thirteenth),
+});
