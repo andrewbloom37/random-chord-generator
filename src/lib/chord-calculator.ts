@@ -149,8 +149,8 @@ const translateFifth = (note: number | null) => {
 const translateSeventh = (note: number | null) => {
   if (!note) return null;
   if (note === 9) return '6';
-  if (note === 10) return 'Dom7';
-  return 'M7';
+  if (note === 10) return '-7';
+  return 'Maj7';
 };
 
 const translateNinth = (note: Array<number> | null) => {
