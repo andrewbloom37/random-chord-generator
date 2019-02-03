@@ -24,7 +24,7 @@ const generateThirteenth = () =>
   20 + generateRandomNumber(2);
 
 interface Chord {
-  third: number | null,
+  third: number,
   fifth: number | null,
   seventh: number | null,
   ninth: Array<number> | null,
@@ -41,14 +41,34 @@ const generateRandomChord = () => {
     eleventh: generateEleventh(),
     thirteenth: generateThirteenth(),
   };
-  if (chord.third === 5) chord.eleventh = null;
-  if (chord.fifth === 8) chord.thirteenth = null;
-  if (chord.seventh === 9) chord.thirteenth = null;
   return chord;
 };
 
-interface ChanceOfPlaying {
-  third: number,
+const minorThirdNoSharpedNinth = (chord: Chord): boolean =>
+  chord.third === 3 && !!chord.ninth && chord.ninth.includes(15);
+
+const fourthNoEleventh = (chord: Chord): boolean =>
+  chord.third === 5 && chord.eleventh === 17;
+
+const flatFifthNoSharpedEleventh = (chord: Chord): boolean =>
+  chord.fifth === 6 && chord.eleventh === 18;
+
+const augmentedFifthNoFlatThirteenth = (chord: Chord): boolean =>
+  chord.fifth === 8 && chord.thirteenth === 20;
+
+const sixthNoThirteenth = (chord: Chord): boolean =>
+  chord.seventh === 9 && chord.thirteenth === 21;
+
+const doLogic = (chord: Chord): Chord => {
+  if (minorThirdNoSharpedNinth(chord)) chord.ninth = null;
+  if (fourthNoEleventh(chord)) chord.eleventh = null;
+  if (flatFifthNoSharpedEleventh(chord)) chord.eleventh = null;
+  if (augmentedFifthNoFlatThirteenth(chord)) chord.thirteenth = null;
+  if (sixthNoThirteenth(chord)) chord.thirteenth = null;
+  return chord;
+}
+
+export interface ChanceOfPlaying {
   fifth: number,
   seventh: number,
   ninth: number,
@@ -56,24 +76,33 @@ interface ChanceOfPlaying {
   thirteenth: number,
 };
 
+type ChanceKeys = 'third' | 'fifth' | 'seventh' | 'ninth' | 'eleventh' | 'thirteenth';
+
 const calculateNotesToPlay = (chord: Chord, chance: ChanceOfPlaying): Chord => {
-  const calculatedChord = {};
-  Object.keys(chord).forEach(key => {
-    // @ts-ignore: no index errors below
-    if (Math.random() > percentToDecimal(chance[key])) {
-      // @ts-ignore
-      calculatedChord[key] = null;
-    } else {
-      // @ts-ignore
-      calculatedChord[key] = chord[key];
-    }
-  })
-  // @ts-ignore: runtime created object
-  return calculatedChord;
+  try {
+    const calculatedChord = {};
+    // @ts-ignore
+    calculatedChord.third = chord.third;
+    // @ts-ignore: ChanceKeys is not a 'string' (but it is a string enum, so this works)
+    Object.keys(chord).forEach((key: ChanceKeys) => {
+      if (key === 'third') return;
+      if (Math.random() > percentToDecimal(chance[key])) {
+        // @ts-ignore
+        calculatedChord[key] = null;
+      } else {
+        // @ts-ignore
+        calculatedChord[key] = chord[key];
+      }
+    })
+    // @ts-ignore: this is a runtime created object
+    return calculatedChord;
+  } catch (err) {
+    console.log(err);
+    return chord;
+  }
 };
 
 const completelyRandom: ChanceOfPlaying  = {
-  third: generateRandomNumber(100),
   fifth: generateRandomNumber(100),
   seventh: generateRandomNumber(100),
   ninth: generateRandomNumber(100),
@@ -83,7 +112,7 @@ const completelyRandom: ChanceOfPlaying  = {
 
 export const generateRoot = () => generateRandomNumber(12);
 export const chordCalculator = (chance = completelyRandom): Chord =>
-  calculateNotesToPlay(generateRandomChord(), chance);
+  doLogic(calculateNotesToPlay(generateRandomChord(), chance));
 
 interface JustRoot {
   root: number,
@@ -93,7 +122,7 @@ export type FullChord = JustRoot & Chord;
 
 export const calculateChordRelativeToRoot = (root: number, chord: Chord): FullChord => ({
   root,
-  third: chord.third ? chord.third + root : null,
+  third: chord.third + root,
   fifth: chord.fifth ? chord.fifth + root : null,
   seventh: chord.seventh ? chord.seventh + root : null,
   ninth: chord.ninth ? chord.ninth.map(v => v + root) : null,
@@ -104,8 +133,7 @@ export const calculateChordRelativeToRoot = (root: number, chord: Chord): FullCh
 const note = ['A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab'];
 export const getNote = (root: number) => note[root]; 
 
-const translateThird = (note: number | null) => {
-  if (!note) return null;
+const translateThird = (note: number) => {
   if (note === 3) return '-';
   if (note === 4) return 'M';
   return '4';
@@ -147,7 +175,7 @@ const translateThirteenth = (note: number | null) => {
 };
 
 export interface ReadableChord {
-  third: string | null,
+  third: string,
   fifth: string | null,
   seventh: string | null,
   ninth: string | null,

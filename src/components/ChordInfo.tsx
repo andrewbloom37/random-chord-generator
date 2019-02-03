@@ -6,10 +6,9 @@ interface Props {
   readableChord: ReadableChord,
 };
 
-const ChordInfo = ({rootNote, readableChord}: Props) => (
-  <table>
-    <tbody>
-    <tr>
+const ChordInfo = ({ rootNote, readableChord }: Props) => (
+  <React.Fragment>
+    <tr className='chance-row'>
       <td>root</td>
       <td>third</td>
       <td>fifth</td>
@@ -18,7 +17,7 @@ const ChordInfo = ({rootNote, readableChord}: Props) => (
       <td>eleventh</td>
       <td>thirteenth</td>
     </tr>
-    <tr>
+    <tr className='chance-row'>
       <td>{rootNote}</td>
       <td>{readableChord.third}</td>
       <td>{readableChord.fifth}</td>
@@ -27,8 +26,7 @@ const ChordInfo = ({rootNote, readableChord}: Props) => (
       <td>{readableChord.eleventh}</td>
       <td>{readableChord.thirteenth}</td>
     </tr>
-    </tbody>
-  </table>
+  </React.Fragment>
 );
 
 export default ChordInfo;
