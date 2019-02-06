@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyledInput } from './styled/styled-inputs';
 
 interface Props {
   disabled: boolean,
@@ -7,7 +8,7 @@ interface Props {
 };
 
 const Input = (props: Props) => (
-  <input
+  <StyledInput
     disabled={props.disabled}
     min='0'
     max='100'

@@ -1,7 +1,11 @@
 import React from 'react';
 import './App.css';
+
 import ChordInfo from './components/ChordInfo';
 import ValueControls from './components/ValueControls';
+import { ChanceTable } from './components/styled/styled-tables';
+import { StyledButton } from './components/styled/styled-buttons';
+
 import {
   ChanceOfPlaying,
   chordCalculator,
@@ -49,15 +53,15 @@ export default class App extends React.Component<{}, State> {
           <h1>random chord generator</h1>
         </header>
         <main>
-          <button
+          <StyledButton
             onClick={() => this.setState({
               ...this.state,
               output: randomize(this.state.chance),
             })}
           >
             generate a random chord
-          </button>
-          <table className='chance-table'>
+          </StyledButton>
+          <ChanceTable>
             <tbody>
               <ChordInfo
                 readableChord={this.state.output.chord}
@@ -70,7 +74,7 @@ export default class App extends React.Component<{}, State> {
                 })}
               />
             </tbody>
-          </table>
+          </ChanceTable>
         </main>
       </div>
     );

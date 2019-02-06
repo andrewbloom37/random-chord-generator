@@ -1,5 +1,6 @@
 import React from 'react';
 import { ReadableChord } from '../lib/chord-calculator';
+import { ChanceRow } from './styled/styled-tables';
 
 interface Props {
   rootNote: string,
@@ -8,7 +9,7 @@ interface Props {
 
 const ChordInfo = ({ rootNote, readableChord }: Props) => (
   <React.Fragment>
-    <tr className='chance-row'>
+    <ChanceRow>
       <td>root</td>
       <td>third</td>
       <td>fifth</td>
@@ -16,8 +17,8 @@ const ChordInfo = ({ rootNote, readableChord }: Props) => (
       <td>ninth</td>
       <td>eleventh</td>
       <td>thirteenth</td>
-    </tr>
-    <tr className='chance-row'>
+    </ChanceRow>
+    <ChanceRow>
       <td>{rootNote}</td>
       <td>{readableChord.third}</td>
       <td>{readableChord.fifth}</td>
@@ -25,7 +26,7 @@ const ChordInfo = ({ rootNote, readableChord }: Props) => (
       <td>{readableChord.ninth}</td>
       <td>{readableChord.eleventh}</td>
       <td>{readableChord.thirteenth}</td>
-    </tr>
+    </ChanceRow>
   </React.Fragment>
 );
 
