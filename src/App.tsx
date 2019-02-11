@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import './App.css';
 
 import ChordInfo from './components/ChordInfo';
@@ -15,15 +15,19 @@ import {
   ReadableChord
 } from './lib/chord-calculator';
 
-interface State {
-  chance: ChanceOfPlaying | null,
-  output: {
-    root: string,
-    chord: ReadableChord,
-  },
+interface ChordOutput {
+  root: string,
+  chord: ReadableChord,
 };
 
-const initialChord = {
+type Chance = ChanceOfPlaying | null;
+
+interface State {
+  chance: Chance,
+  output: ChordOutput, 
+};
+
+const initialChord: ReadableChord = {
   third: '',
   fifth: null,
   seventh: null,
@@ -32,51 +36,50 @@ const initialChord = {
   thirteenth: null,
 };
 
-const randomize = (chance: ChanceOfPlaying | null) => ({
+const initialOutput: ChordOutput = {
+  root: '',
+  chord: initialChord,
+}
+
+const initialState: State = {
+  chance: null,
+  output: initialOutput,
+};
+
+const randomize = (chance: ChanceOfPlaying | null): ChordOutput => ({
   root: getNote(generateRoot()),
   chord: getReadableChord(chordCalculator(chance || undefined)),
 });
 
-export default class App extends React.Component<{}, State> {
-  state = {
-    chance: null,
-    output: {
-      root: '',
-      chord: initialChord,
-    },
-  };
-
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <h1>random chord generator</h1>
-        </header>
-        <main>
-          <StyledButton
-            onClick={() => this.setState({
-              ...this.state,
-              output: randomize(this.state.chance),
-            })}
-          >
-            generate a random chord
-          </StyledButton>
-          <ChanceTable>
-            <tbody>
-              <ChordInfo
-                readableChord={this.state.output.chord}
-                rootNote={this.state.output.root}
-              />
-              <ValueControls
-                updateChance={(chance: ChanceOfPlaying) => this.setState({
-                  ...this.state,
-                  chance,
-                })}
-              />
-            </tbody>
-          </ChanceTable>
-        </main>
-      </div>
-    );
-  }
+const App: FunctionComponent<{state?: State}> = ({ state = initialState }) => {
+  const [chance, setChance] = useState(state.chance);
+  const [output, setOutput] = useState(state.output);
+  
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>random chord generator</h1>
+      </header>
+      <main>
+        <StyledButton
+          onClick={() => setOutput(randomize(chance))}
+        >
+          generate a random chord
+        </StyledButton>
+        <ChanceTable>
+          <tbody>
+            <ChordInfo
+              readableChord={output.chord}
+              rootNote={output.root}
+            />
+            <ValueControls
+              updateChance={(newChance: ChanceOfPlaying) => setChance(newChance)}
+            />
+          </tbody>
+        </ChanceTable>
+      </main>
+    </div>
+  );
 }
+
+export default App;
