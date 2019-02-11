@@ -15,7 +15,7 @@ const Expandable: FunctionComponent<{children?: any, state?: State}> = ({childre
   const [collapsed, setCollapsed] = useState(state.collapsed);
 
   return (
-    <React.Fragment>
+    <>
       <ExpandableButton
         onClick={() => setCollapsed(!collapsed)} 
       >
@@ -24,7 +24,7 @@ const Expandable: FunctionComponent<{children?: any, state?: State}> = ({childre
       <StyledExpandable collapsed={collapsed}>
         {children}
       </StyledExpandable>
-    </React.Fragment>
+    </>
   )
 }
 

@@ -18,7 +18,6 @@ export const StyledButton = styled.button`
 
 export const ExpandableButton = styled(StyledButton)`
   width: calc(90% + 2px);
-  padding-left: 38.5%;
   text-align: center;
   margin-top: 20px;
   margin-bottom: 0px;

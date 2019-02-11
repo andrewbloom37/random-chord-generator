@@ -1,4 +1,9 @@
 import {
+  generateRandomNumber,
+  generateRandomChord,
+} from './generate-chords';
+
+import {
   translateThird,
   translateFifth,
   translateSeventh,
@@ -7,52 +12,18 @@ import {
   translateThirteenth,
 } from './translate-notes';
 
+import {
+  Chord,
+  ChanceOfPlaying,
+  ChanceKeys,
+  FullChord,
+  ReadableChord,
+  QualityRatios,
+} from './types/chord-types';
+
 const percentToDecimal = (input: number) => input / 100;
 
-const generateRandomNumber = (n: number) => Math.floor(Math.random() * n);
-
-const generateThird = () =>
-  3 + generateRandomNumber(3);
-
-const generateFifth = () =>
-  6 + generateRandomNumber(3);
-
-const generateSeventh = () =>
-  9 + generateRandomNumber(3);
-
-const generateNinth = () => {
-  const randomOneOfFour = generateRandomNumber(4);
-  if (randomOneOfFour === 3) return [13, 15];
-  return [13 + randomOneOfFour];
-};
-
-const generateEleventh = () =>
-  17 + generateRandomNumber(2);
-
-const generateThirteenth = () =>
-  20 + generateRandomNumber(2);
-
-interface Chord {
-  third: number,
-  fifth: number | null,
-  seventh: number | null,
-  ninth: Array<number> | null,
-  eleventh: number | null,
-  thirteenth: number | null,
-};
-
-const generateRandomChord = () => {
-  const chord: Chord = {
-    third: generateThird(),
-    fifth: generateFifth(),
-    seventh: generateSeventh(),
-    ninth: generateNinth(),
-    eleventh: generateEleventh(),
-    thirteenth: generateThirteenth(),
-  };
-  return chord;
-};
-
+// Chord logic
 const minorThirdNoSharpedNinth = (chord: Chord): boolean =>
   chord.third === 3 && !!chord.ninth && chord.ninth.includes(15);
 
@@ -76,16 +47,6 @@ const doLogic = (chord: Chord): Chord => {
   if (sixthNoThirteenth(chord)) chord.thirteenth = null;
   return chord;
 }
-
-export interface ChanceOfPlaying {
-  fifth: number,
-  seventh: number,
-  ninth: number,
-  eleventh: number,
-  thirteenth: number,
-};
-
-type ChanceKeys = 'third' | 'fifth' | 'seventh' | 'ninth' | 'eleventh' | 'thirteenth';
 
 const calculateNotesToPlay = (chord: Chord, chance: ChanceOfPlaying): Chord => {
   try {
@@ -120,14 +81,18 @@ const completelyRandom: ChanceOfPlaying  = {
 };
 
 export const generateRoot = () => generateRandomNumber(12);
+
+const placeholder: QualityRatios = {
+  third: [1,1,1],
+  fifth: [1,1,1],
+  seventh: [1,1,1],
+  ninth: [1,1,1,1],
+  eleventh: [1,1],
+  thirteenth: [1,1],
+}
+
 export const chordCalculator = (chance = completelyRandom): Chord =>
-  doLogic(calculateNotesToPlay(generateRandomChord(), chance));
-
-interface JustRoot {
-  root: number,
-};
-
-export type FullChord = JustRoot & Chord;
+  doLogic(calculateNotesToPlay(generateRandomChord(placeholder), chance));
 
 export const calculateChordRelativeToRoot = (root: number, chord: Chord): FullChord => ({
   root,
@@ -138,17 +103,6 @@ export const calculateChordRelativeToRoot = (root: number, chord: Chord): FullCh
   eleventh: chord.eleventh ? chord.eleventh + root : null,
   thirteenth: chord.thirteenth ? chord.thirteenth + root : null,
 });
-
-
-
-export interface ReadableChord {
-  third: string,
-  fifth: string | null,
-  seventh: string | null,
-  ninth: string | null,
-  eleventh: string | null,
-  thirteenth: string | null,
-};
 
 export const getReadableChord = (chord: Chord): ReadableChord => ({
   third: translateThird(chord.third),

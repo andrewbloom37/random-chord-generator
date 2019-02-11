@@ -1,7 +1,8 @@
 import React from 'react';
 import v4 from 'uuid/v4';
 import Input from './Input';
-import { ChanceOfPlaying } from '../lib/chord-calculator';
+import { ChanceOfPlaying } from '../lib/types/chord-types';
+import { ChanceRow } from './styled/styled-tables';
 
 interface Props {
   updateChance(chance: ChanceOfPlaying | null): void,
@@ -50,8 +51,16 @@ export default class ValueControls extends React.Component<Props, State> {
 
   render() {
     return (
-      <React.Fragment>
-        <tr className='chance-row'>
+      <tbody>
+        <ChanceRow>
+          <td></td>
+          <td>5th</td>
+          <td>7th</td>
+          <td>9th</td>
+          <td>11th</td>
+          <td>13th</td>
+        </ChanceRow>
+        <ChanceRow>
           <td>
             <label>
               all random
@@ -64,7 +73,6 @@ export default class ValueControls extends React.Component<Props, State> {
               />
             </label>
           </td>
-          <td></td>
           <td>
             <Input
               disabled={this.state.completelyRandom}
@@ -135,8 +143,8 @@ export default class ValueControls extends React.Component<Props, State> {
               })}
               /> 
           </td>
-        </tr>
-      </React.Fragment>
+        </ChanceRow>
+      </tbody>
     );
   }
 }

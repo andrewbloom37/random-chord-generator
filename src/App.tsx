@@ -4,18 +4,21 @@ import './App.css';
 import ChordInfo from './components/ChordInfo';
 import Expandable from './components/Expandable';
 import ValueControls from './components/ValueControls';
-import { ChanceTable } from './components/styled/styled-tables';
+import { ChanceTable, ChanceHeader } from './components/styled/styled-tables';
 import { StyledButton } from './components/styled/styled-buttons';
 
 import { getNote } from './lib/translate-notes';
 
 import {
-  ChanceOfPlaying,
   chordCalculator,
   generateRoot,
   getReadableChord,
-  ReadableChord
 } from './lib/chord-calculator';
+
+import {
+  ChanceOfPlaying,
+  ReadableChord
+} from './lib/types/chord-types';
 
 interface ChordOutput {
   root: string,
@@ -69,18 +72,18 @@ const App: FunctionComponent<{state?: State}> = ({ state = initialState }) => {
           generate a random chord
         </StyledButton>
         <ChanceTable>
-          <tbody>
-            <ChordInfo
-              readableChord={output.chord}
-              rootNote={output.root}
-            />
+          <ChordInfo
+            readableChord={output.chord}
+            rootNote={output.root}
+          />
+        </ChanceTable>
+        <Expandable>
+          <ChanceHeader>chance to play</ChanceHeader>
+          <ChanceTable>
             <ValueControls
               updateChance={(newChance: ChanceOfPlaying) => setChance(newChance)}
             />
-          </tbody>
-        </ChanceTable>
-        <Expandable>
-          <p>hello!</p>
+          </ChanceTable>
         </Expandable>
       </main>
     </div>
