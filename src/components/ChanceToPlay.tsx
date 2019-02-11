@@ -22,7 +22,7 @@ const initialChance = {
   thirteenth: 50,
 };
 
-export default class ValueControls extends React.Component<Props, State> {
+export default class ChanceToPlay extends React.Component<Props, State> {
   state = {
     completelyRandom: true,
     chance: initialChance,

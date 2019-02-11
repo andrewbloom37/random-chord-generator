@@ -2,7 +2,7 @@ import React from 'react';
 import { StyledInput } from './styled/styled-inputs';
 
 interface Props {
-  disabled: boolean,
+  disabled?: boolean,
   update(v: number): void,
   value: number,
 };

@@ -82,17 +82,8 @@ const completelyRandom: ChanceOfPlaying  = {
 
 export const generateRoot = () => generateRandomNumber(12);
 
-const placeholder: QualityRatios = {
-  third: [1,1,1],
-  fifth: [1,1,1],
-  seventh: [1,1,1],
-  ninth: [1,1,1,1],
-  eleventh: [1,1],
-  thirteenth: [1,1],
-}
-
-export const chordCalculator = (chance = completelyRandom): Chord =>
-  doLogic(calculateNotesToPlay(generateRandomChord(placeholder), chance));
+export const chordCalculator = (qualityRatios: QualityRatios, chance = completelyRandom): Chord =>
+  doLogic(calculateNotesToPlay(generateRandomChord(qualityRatios), chance));
 
 export const calculateChordRelativeToRoot = (root: number, chord: Chord): FullChord => ({
   root,

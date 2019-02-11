@@ -3,15 +3,20 @@ import React, { FunctionComponent, useState } from 'react';
 import { ExpandableButton } from './styled/styled-buttons';
 import { StyledExpandable } from './styled/styled-expandable';
 
-interface State {
+interface LocalState {
   collapsed: boolean,
 };
 
-const initialState: State = {
+interface State {
+  children?: any,
+  state?: LocalState,
+};
+
+const initialState: LocalState = {
   collapsed: true,
 };
 
-const Expandable: FunctionComponent<{children?: any, state?: State}> = ({children, state = initialState}) => {
+const Expandable: FunctionComponent<State> = ({children, state = initialState}) => {
   const [collapsed, setCollapsed] = useState(state.collapsed);
 
   return (

@@ -1,10 +1,12 @@
 import React, { FunctionComponent, useState } from 'react';
 import './App.css';
 
-import ChordInfo from './components/ChordInfo';
+import ChordQualities from './components/ChordQualities';
 import Expandable from './components/Expandable';
-import ValueControls from './components/ValueControls';
-import { ChanceTable, ChanceHeader } from './components/styled/styled-tables';
+import ChanceToPlay from './components/ChanceToPlay';
+import ChordInfo from './components/ChordInfo';
+
+import { ChanceTable, ChanceHeader, SettingsBreak } from './components/styled/styled-tables';
 import { StyledButton } from './components/styled/styled-buttons';
 
 import { getNote } from './lib/translate-notes';
@@ -17,8 +19,10 @@ import {
 
 import {
   ChanceOfPlaying,
-  ReadableChord
+  ReadableChord,
+  QualityRatios
 } from './lib/types/chord-types';
+
 
 interface ChordOutput {
   root: string,
@@ -29,7 +33,8 @@ type Chance = ChanceOfPlaying | null;
 
 interface State {
   chance: Chance,
-  output: ChordOutput, 
+  output: ChordOutput,
+  qualityRatios: QualityRatios,
 };
 
 const initialChord: ReadableChord = {
@@ -44,21 +49,32 @@ const initialChord: ReadableChord = {
 const initialOutput: ChordOutput = {
   root: '',
   chord: initialChord,
-}
+};
+
+const initialQualityRatios: QualityRatios = {
+  third: [1, 1, 1],
+  fifth: [1, 1, 1],
+  seventh: [1, 1, 1],
+  ninth: [1, 1, 1, 1],
+  eleventh: [1, 1],
+  thirteenth: [1, 1],
+};
 
 const initialState: State = {
   chance: null,
   output: initialOutput,
+  qualityRatios: initialQualityRatios,
 };
 
-const randomize = (chance: ChanceOfPlaying | null): ChordOutput => ({
+const randomize = (qualityRatios: QualityRatios, chance: ChanceOfPlaying | null): ChordOutput => ({
   root: getNote(generateRoot()),
-  chord: getReadableChord(chordCalculator(chance || undefined)),
+  chord: getReadableChord(chordCalculator(qualityRatios, chance || undefined)),
 });
 
 const App: FunctionComponent<{state?: State}> = ({ state = initialState }) => {
   const [chance, setChance] = useState(state.chance);
   const [output, setOutput] = useState(state.output);
+  const [qualityRatios, setQualityRatios] = useState(state.qualityRatios);
   
   return (
     <div className="App">
@@ -67,7 +83,7 @@ const App: FunctionComponent<{state?: State}> = ({ state = initialState }) => {
       </header>
       <main>
         <StyledButton
-          onClick={() => setOutput(randomize(chance))}
+          onClick={() => setOutput(randomize(qualityRatios, chance))}
         >
           generate a random chord
         </StyledButton>
@@ -80,8 +96,15 @@ const App: FunctionComponent<{state?: State}> = ({ state = initialState }) => {
         <Expandable>
           <ChanceHeader>chance to play</ChanceHeader>
           <ChanceTable>
-            <ValueControls
+            <ChanceToPlay
               updateChance={(newChance: ChanceOfPlaying) => setChance(newChance)}
+            />
+          </ChanceTable>
+          <SettingsBreak/>
+          <ChanceHeader>quality probability ratios</ChanceHeader>
+          <ChanceTable>
+            <ChordQualities
+              updateQualities={(newQualities: QualityRatios) => setQualityRatios(newQualities)}
             />
           </ChanceTable>
         </Expandable>
