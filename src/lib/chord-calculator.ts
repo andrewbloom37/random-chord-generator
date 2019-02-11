@@ -1,3 +1,12 @@
+import {
+  translateThird,
+  translateFifth,
+  translateSeventh,
+  translateNinth,
+  translateEleventh,
+  translateThirteenth,
+} from './translate-notes';
+
 const percentToDecimal = (input: number) => input / 100;
 
 const generateRandomNumber = (n: number) => Math.floor(Math.random() * n);
@@ -130,49 +139,7 @@ export const calculateChordRelativeToRoot = (root: number, chord: Chord): FullCh
   thirteenth: chord.thirteenth ? chord.thirteenth + root : null,
 });
 
-const note = ['A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab'];
-export const getNote = (root: number) => note[root]; 
 
-const translateThird = (note: number) => {
-  if (note === 3) return '-';
-  if (note === 4) return 'M';
-  return '4';
-};
-
-const translateFifth = (note: number | null) => {
-  if (!note) return null;
-  if (note === 6) return 'b5';
-  if (note === 7) return '5';
-  return '+5';
-};
-
-const translateSeventh = (note: number | null) => {
-  if (!note) return null;
-  if (note === 9) return '6';
-  if (note === 10) return '-7';
-  return 'Maj7';
-};
-
-const translateNinth = (note: Array<number> | null) => {
-  if (!note) return null;
-  if (note.length === 2) return 'b9 & #9';
-  const ninth = note[0];
-  if (ninth === 13) return 'b9';
-  if (ninth === 14) return '9';
-  return '#9'
-};
-
-const translateEleventh = (note: number | null) => {
-  if (!note) return null;
-  if (note === 17) return '11';
-  return '#11';
-};
-
-const translateThirteenth = (note: number | null) => {
-  if (!note) return null;
-  if (note === 20) return 'b13';
-  return '13';
-};
 
 export interface ReadableChord {
   third: string,

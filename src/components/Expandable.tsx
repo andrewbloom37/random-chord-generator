@@ -1,24 +1,31 @@
-import React from 'react';
+import React, { FunctionComponent, useState } from 'react';
 
-//TODO: create expandable styled component
+import { ExpandableButton } from './styled/styled-buttons';
+import { StyledExpandable } from './styled/styled-expandable';
 
-// export default class Expandable extends React.Component<{}, {}> {
-//   state = {
-//     collapsed: true,
-//   };
+interface State {
+  collapsed: boolean,
+};
 
-//   render() {
-//     return (
-//       <React.Fragment>
-//         <ExpandableButton
-//           onClick={() => this.setState({ collapsed: !this.state.collapsed })} 
-//         >
-//           {this.state.collapsed ? 'expand' : 'collapse'}
-//         </ExpandableButton>
-//         <StyledExpandable collapsed={this.state.collapsed}>
-//           {this.props.children}
-//         </StyledExpandable>
-//       </React.Fragment>
-//     )
-//   }
-// }
+const initialState: State = {
+  collapsed: true,
+};
+
+const Expandable: FunctionComponent<{children?: any, state?: State}> = ({children, state = initialState}) => {
+  const [collapsed, setCollapsed] = useState(state.collapsed);
+
+  return (
+    <React.Fragment>
+      <ExpandableButton
+        onClick={() => setCollapsed(!collapsed)} 
+      >
+        advanced: {collapsed ? 'expand' : 'collapse'}
+      </ExpandableButton>
+      <StyledExpandable collapsed={collapsed}>
+        {children}
+      </StyledExpandable>
+    </React.Fragment>
+  )
+}
+
+export default Expandable;

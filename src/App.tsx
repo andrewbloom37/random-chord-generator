@@ -2,15 +2,17 @@ import React, { FunctionComponent, useState } from 'react';
 import './App.css';
 
 import ChordInfo from './components/ChordInfo';
+import Expandable from './components/Expandable';
 import ValueControls from './components/ValueControls';
 import { ChanceTable } from './components/styled/styled-tables';
 import { StyledButton } from './components/styled/styled-buttons';
+
+import { getNote } from './lib/translate-notes';
 
 import {
   ChanceOfPlaying,
   chordCalculator,
   generateRoot,
-  getNote,
   getReadableChord,
   ReadableChord
 } from './lib/chord-calculator';
@@ -77,6 +79,9 @@ const App: FunctionComponent<{state?: State}> = ({ state = initialState }) => {
             />
           </tbody>
         </ChanceTable>
+        <Expandable>
+          <p>hello!</p>
+        </Expandable>
       </main>
     </div>
   );

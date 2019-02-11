@@ -1,4 +1,5 @@
 import React from 'react';
+import v4 from 'uuid/v4';
 import Input from './Input';
 import { ChanceOfPlaying } from '../lib/chord-calculator';
 
@@ -9,7 +10,7 @@ interface Props {
 interface State {
   completelyRandom: boolean,
   chance: ChanceOfPlaying,
-  hash: number,
+  hash: string,
 };
 
 const initialChance = {
@@ -24,7 +25,7 @@ export default class ValueControls extends React.Component<Props, State> {
   state = {
     completelyRandom: true,
     chance: initialChance,
-    hash: Math.random(),
+    hash: v4(),
   };
 
   componentDidUpdate(_: Props, prevState: State) {
@@ -43,7 +44,7 @@ export default class ValueControls extends React.Component<Props, State> {
     this.setState({
       ...this.state,
       completelyRandom: checked,
-      hash: Math.random(),
+      hash: v4(),
     });
   };
 
@@ -70,7 +71,7 @@ export default class ValueControls extends React.Component<Props, State> {
               value={this.state.chance.fifth}
               update={(v: number) => this.setState({
                 ...this.state,
-                hash: Math.random(),
+                hash: v4(),
                 chance: {
                   ...this.state.chance,
                   fifth: v,
@@ -84,7 +85,7 @@ export default class ValueControls extends React.Component<Props, State> {
               value={this.state.chance.seventh}
               update={(v: number) => this.setState({
                 ...this.state,
-                hash: Math.random(),
+                hash: v4(),
                 chance: {
                   ...this.state.chance,
                   seventh: v,
@@ -98,7 +99,7 @@ export default class ValueControls extends React.Component<Props, State> {
               value={this.state.chance.ninth}
               update={(v: number) => this.setState({
                 ...this.state,
-                hash: Math.random(),
+                hash: v4(),
                 chance: {
                   ...this.state.chance,
                   ninth: v,
@@ -112,7 +113,7 @@ export default class ValueControls extends React.Component<Props, State> {
               value={this.state.chance.eleventh}
               update={(v: number) => this.setState({
                 ...this.state,
-                hash: Math.random(),
+                hash: v4(),
                 chance: {
                   ...this.state.chance,
                   eleventh: v,
@@ -126,7 +127,7 @@ export default class ValueControls extends React.Component<Props, State> {
               value={this.state.chance.thirteenth}
               update={(v: number) => this.setState({
                 ...this.state,
-                hash: Math.random(),
+                hash: v4(),
                 chance: {
                   ...this.state.chance,
                   thirteenth: v,
