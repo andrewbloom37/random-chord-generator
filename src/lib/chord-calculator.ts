@@ -50,21 +50,24 @@ const doLogic = (chord: Chord): Chord => {
 
 const calculateNotesToPlay = (chord: Chord, chance: ChanceOfPlaying): Chord => {
   try {
-    const calculatedChord = {};
-    // @ts-ignore
-    calculatedChord.third = chord.third;
-    // @ts-ignore: ChanceKeys is not a 'string' (but it is a string enum, so this works)
-    Object.keys(chord).forEach((key: ChanceKeys) => {
+    const calculatedChord: Chord = {
+      third: chord.third,
+      fifth: null,
+      seventh: null,
+      ninth: null,
+      eleventh: null,
+      thirteenth: null,
+    };
+
+    Object.entries(chord).forEach(([key, value]) => {
       if (key === 'third') return;
-      if (Math.random() > percentToDecimal(chance[key])) {
+      // @ts-ignore
+      if (Math.random() <= percentToDecimal(chance[key])) {
         // @ts-ignore
-        calculatedChord[key] = null;
-      } else {
-        // @ts-ignore
-        calculatedChord[key] = chord[key];
+        calculatedChord[key] = value;
       }
     })
-    // @ts-ignore: this is a runtime created object
+
     return calculatedChord;
   } catch (err) {
     console.log(err);
